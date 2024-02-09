@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c71982dde92334fafdc2e748d7601e, type: 3}
+  m_Name: Ranged
+  m_EditorClassIdentifier: 
+  ID: 5
+  Name: Ranged
+  Description: Ranged Attack
+  animationTime: 1.5
+  type: 0
+  counters:
+  - {fileID: 11400000, guid: 521d49074cd0ceb4291517fb5b9e303e, type: 2}
+  defences:
+  - {fileID: 11400000, guid: d65f13538b47a694996728ab9f932a91, type: 2}
