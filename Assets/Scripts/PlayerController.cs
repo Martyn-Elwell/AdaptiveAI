@@ -9,20 +9,25 @@ public class PlayerController : Controller
 
     public void Update()
     {
-        if (!inCombat)
+        /*if (!inCombat)
         {
             inputHandler();
         }
         else if (inCombat)
         {
             returnToItialPosition();
-        }
-        
+        }*/
+        inputHandler();
+
     }
 
     public void inputHandler()
     {
         Gamepad gamepad = Gamepad.current;
+
+        float horizontalInput = Input.GetAxis("Horizontal");
+        animator.SetFloat("Direction", horizontalInput);
+
         if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("A is pressed!");
