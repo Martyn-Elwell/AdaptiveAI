@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class AIController : Controller
 {
-    PlayerController player;
+    public PlayerController player;
+    private float idealDistance = 3f;
     public void Update()
     {
-
+        float distance = transform.position.z - player.transform.position.z;
+        if (Mathf.Abs(distance - idealDistance) >= 0.2f ) { animator.SetFloat("Direction", distance - idealDistance); }
+        else { animator.SetFloat("Direction", 0f) ; }
+        
     }
 
     public void warn()
     {
         Actions predictedAction = predictAction();
 
-        startAcion(predictedAction);
+        startAction(predictedAction);
     }
 
     public Actions predictAction()
