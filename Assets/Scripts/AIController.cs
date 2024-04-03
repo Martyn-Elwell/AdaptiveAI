@@ -6,6 +6,10 @@ public class AIController : Controller
 {
     public PlayerController player;
     private float idealDistance = 3f;
+    [Header ("Override")]
+    public bool debugOverride = false;
+    [Range(0, 5)]
+    public int debugOverrideNum;
     public void Update()
     {
         float distance = transform.position.z - player.transform.position.z;
@@ -14,16 +18,25 @@ public class AIController : Controller
         
     }
 
-    public void warn()
+    public Actions warn()
     {
+        
         Actions predictedAction = predictAction();
-
+        if (stunned)
+        {
+            stunned = false;
+            predictedAction = actions[7];
+            Debug.Log("Stun is reset");
+        }
+        currentAction = predictedAction;
         startAction(predictedAction);
+        return predictedAction;
     }
 
     public Actions predictAction()
     {
         Actions returnAction = actions[Random.Range(0, 5)];
+        if (debugOverride) { returnAction = actions[debugOverrideNum]; }
         return returnAction;
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,7 +30,7 @@ public class PlayerController : Controller
 
         float horizontalInput = Input.GetAxis("Horizontal");
         animator.SetFloat("Direction", horizontalInput);
-
+        if (stunned && !inCombat) { stunned = false; return; }
         if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("A is pressed!");
@@ -40,7 +42,6 @@ public class PlayerController : Controller
             Debug.Log("B is pressed!");
             // Heavy
             attack(1);
-            AI.warn();
 
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton2) || Input.GetKeyDown(KeyCode.Alpha3))
@@ -76,32 +77,43 @@ public class PlayerController : Controller
     public void attack(int id)
     {
         startAction(actions[id]);
-        AI.warn();
-        Invoke("clash", actions[id].animationTime);
+        Actions aiAction = AI.warn();
+        float shortestTime = actions[id].impactTime;
+        if (shortestTime > aiAction.impactTime)
+        {
+            shortestTime = aiAction.impactTime;
+        }
+        Invoke("HitDetection", shortestTime);
     }
 
-    public void clash()
+    public void HitDetection()
     {
         if (currentAction == AI.currentAction)
         {
-            collide();
-            AI.collide();
+            Debug.Log("Parried");
+            if (currentAction.type == Type.Defence) { return; }
+            VisualFeedback(actions[6], true, AI);
+            AI.VisualFeedback(actions[6], true, this);
         }
         else if(currentAction.counters.Contains(AI.currentAction) )
         {
-            Debug.Log("Player attacks, AI does not");
-            AI.hurt();
+            Debug.Log("Player counters");
+            VisualFeedback(currentAction, true, AI);
         }
         else if (currentAction.defences.Contains(AI.currentAction))
         {
-            Debug.Log("AI attacks, Player does not");
-            hurt();
+            Debug.Log("AI counters");
+            AI.VisualFeedback(AI.currentAction, true, this);
         }
-        else
+        else if (currentAction.neutral.Contains(AI.currentAction))
         {
-            Debug.Log("Player attacks, AI attacks");
-            hurt();
-            AI.hurt();
+            if (currentAction.type == Type.Defence)
+            {
+                return;
+            }
+            Debug.Log("Both attack");
+            VisualFeedback(currentAction, true, AI);
+            AI.VisualFeedback(AI.currentAction, true, this);
         }
     }
 
