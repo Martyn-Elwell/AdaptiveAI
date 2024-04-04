@@ -15,9 +15,10 @@ MonoBehaviour:
   ID: 7
   Name: Stunned
   Description: Stunned!
+  damage: 0
   impactTime: 2
   animationTime: 2
-  range: 0
+  range: 100
   type: 3
   counters: []
   defences:

@@ -18,7 +18,7 @@ MonoBehaviour:
   damage: 2
   impactTime: 1
   animationTime: 2
-  range: 0
+  range: 3.5
   type: 0
   counters:
   - {fileID: 11400000, guid: 5225eb2d3b0835d43baa36c63caec90a, type: 2}

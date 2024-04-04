@@ -15,9 +15,12 @@ MonoBehaviour:
   ID: 6
   Name: Parry
   Description: Parried!
+  damage: 0
+  impactTime: 0
   animationTime: 2
-  range: 0
+  range: 100
   type: 3
   counters: []
   defences: []
+  neutral: []
   particle: {fileID: 0}

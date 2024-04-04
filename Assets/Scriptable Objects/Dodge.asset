@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 3
   Name: Dodge
   Description: Dodged!
+  damage: 0
   impactTime: 0.8
   animationTime: 1
-  range: 0
+  range: 100
   type: 1
   counters:
+  - {fileID: 11400000, guid: 2c591cd2150d48e49bc7831bce8923c2, type: 2}
   - {fileID: 11400000, guid: 5225eb2d3b0835d43baa36c63caec90a, type: 2}
   - {fileID: 11400000, guid: f46cb04d96160444aa890315be4da4a5, type: 2}
   defences:
-  - {fileID: 11400000, guid: 2c591cd2150d48e49bc7831bce8923c2, type: 2}
   - {fileID: 11400000, guid: cd1e016c12dd85945a3532400bb4b17d, type: 2}
   neutral:
   - {fileID: 11400000, guid: d65f13538b47a694996728ab9f932a91, type: 2}
