@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 1
   Name: Heavy
   Description: Heavy Attack!
+  damage: 4
   impactTime: 1
   animationTime: 2
   range: 0

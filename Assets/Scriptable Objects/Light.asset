@@ -15,7 +15,8 @@ MonoBehaviour:
   ID: 0
   Name: Light
   Description: Light Attack!
-  impactTime: 0.5
+  damage: 2
+  impactTime: 0.3
   animationTime: 1
   range: 0
   type: 0

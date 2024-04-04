@@ -16,6 +16,7 @@ public class Actions : ScriptableObject
     public int ID;
     public string Name;
     public string Description;
+    public int damage;
     public float impactTime;
     public float animationTime;
     public float range;

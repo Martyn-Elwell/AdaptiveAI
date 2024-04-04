@@ -15,7 +15,8 @@ MonoBehaviour:
   ID: 2
   Name: Block
   Description: Blocked!
-  impactTime: 0.5
+  damage: 0
+  impactTime: 0.2
   animationTime: 0.5
   range: 0
   type: 1

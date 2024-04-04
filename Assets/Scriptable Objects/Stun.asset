@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 4
   Name: Stun
   Description: Stunned!
+  damage: 2
   impactTime: 1
   animationTime: 2
   range: 0

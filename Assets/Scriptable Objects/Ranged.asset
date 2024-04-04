@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 5
   Name: Ranged
   Description: Ranged Attack!
+  damage: 2
   impactTime: 1.2
   animationTime: 1.5
   range: 0

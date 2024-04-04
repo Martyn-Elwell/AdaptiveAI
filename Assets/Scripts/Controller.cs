@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
@@ -11,12 +12,15 @@ public class Controller : MonoBehaviour
     public List<Actions> actions;
     public Actions currentAction;
     public GameObject mark;
-    [SerializeField] private List<ParticleSystem> particles;
+    public GameObject knifePrefab;
+    [SerializeField] protected List<ParticleSystem> particles;
     public GameObject textPrefab;
     [SerializeField] protected Color color;
 
     protected bool inCombat = false;
     protected bool stunned = false;
+    [SerializeField] protected float health = 20;
+    [SerializeField] protected Slider healthbar;
 
     void Start()
     {
@@ -50,7 +54,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt();
+                    opponenet.hurt(action.damage);
                 }
                 break;
             // Heavy
@@ -60,7 +64,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt();
+                    opponenet.hurt(action.damage);
                 }
                 break;
             // Block
@@ -70,7 +74,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.sparks();
+                    shieldClash();
                 }
                 break;
             // Dodge
@@ -95,14 +99,16 @@ public class Controller : MonoBehaviour
                 break;
             // Ranged
             case 5:
+                GameObject knife = Instantiate(knifePrefab, transform.position + Vector3.up * 2f, Quaternion.Euler(0f, 0f, 90f));
                 if (sucess)
                 {
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform); ;
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt();
+                    StartCoroutine(delayHurt(0.3f, opponenet, action.damage));
                 }
                 break;
+            // Parried
             case 6:
                 if (sucess)
                 {
@@ -116,13 +122,19 @@ public class Controller : MonoBehaviour
     }
 
 
-    public void hurt()
+    public void hurt(int damage)
     {
         particles[0].Play();
         animator.SetTrigger("Hit");
+        health -= damage;
+        healthbar.value = health;
+        if (health <= 0)
+        {
+            Debug.Log(gameObject.name + " is dead");
+        }
     }
 
-    public void stun()
+    public virtual void stun()
     {
         animator.SetTrigger("Stunned");
         currentAction = actions[7]; // Stunned
@@ -133,5 +145,20 @@ public class Controller : MonoBehaviour
     public void sparks()
     {
         particles[1].Play();
+    }
+    
+    public void shieldClash()
+    {
+        particles[3].Play();
+        Debug.Log(animator.gameObject.name);
+        animator.SetTrigger("SuccesfulBlock");
+    }
+
+
+    public IEnumerator delayHurt(float time, Controller character, int damage)
+    {
+        yield return new WaitForSeconds(time);
+        Debug.Log("hurtignof0");
+        character.hurt(damage);
     }
 }
