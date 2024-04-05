@@ -1249,7 +1249,10 @@ MonoBehaviour:
   textPrefab: {fileID: 553781053869993682, guid: 7c73b5950da248242821731f19a9dafe, type: 3}
   color: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
   health: 20
+  maxHealth: 20
+  score: 0
   healthbar: {fileID: 0}
+  scoreText: {fileID: 0}
   AI: {fileID: 0}
 --- !u!1 &6412452374114637320
 GameObject:

@@ -1,0 +1,4 @@
+Probabalistic vs Deterministic
+Confidence Weighting
+Aggresion Weighting
+Spacing Weighting

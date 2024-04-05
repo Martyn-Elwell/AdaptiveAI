@@ -623,7 +623,10 @@ MonoBehaviour:
   textPrefab: {fileID: 553781053869993682, guid: 7c73b5950da248242821731f19a9dafe, type: 3}
   color: {r: 0.6886792, g: 0.13427073, b: 0.13427073, a: 1}
   health: 20
+  maxHealth: 20
+  score: 0
   healthbar: {fileID: 0}
+  scoreText: {fileID: 0}
   player: {fileID: 0}
   debugOverride: 0
   debugOverrideNum: 0

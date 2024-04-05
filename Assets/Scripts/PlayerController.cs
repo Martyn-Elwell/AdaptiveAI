@@ -32,42 +32,42 @@ public class PlayerController : Controller
 
         float horizontalInput = Input.GetAxis("Horizontal");
         animator.SetFloat("Direction", horizontalInput);
-        if (stunned && !inCombat) { stunned = false; return; }
+        if (stunned) { return; }
         if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("A is pressed!");
+            //Debug.Log("A is pressed!");
             // Dodge
             attack(3);
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton1) || Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.Log("B is pressed!");
+            //Debug.Log("B is pressed!");
             // Heavy
             attack(1);
 
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton2) || Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("X is pressed!");
+            //Debug.Log("X is pressed!");
             // Light
             attack(0);
 
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton3) || Input.GetKeyDown(KeyCode.Alpha4))
         {
-            Debug.Log("Y is pressed!");
+            //Debug.Log("Y is pressed!");
             // Stun
             attack(4);
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Alpha5))
         {
-            Debug.Log("LB is pressed!");
+            //Debug.Log("LB is pressed!");
             // Block
             attack(2);
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.Alpha6))
         {
-            Debug.Log("RB is pressed!");
+            //Debug.Log("RB is pressed!");
             // Ranged
             attack(5);
 
@@ -90,8 +90,23 @@ public class PlayerController : Controller
 
     public void HitDetection()
     {
+        Debug.Log("Ai uses " + AI.currentAction.name);
+
         float distance = Vector3.Distance(transform.position, AI.transform.position);
         //Players attack is within range
+        AI.recordAction(currentAction);
+
+        // Player in range AI not
+        if (currentAction.range >= distance && AI.currentAction.range < distance)
+        {
+            VisualFeedback(currentAction, true, AI);
+        }
+
+        // AI in range Player not
+        if (AI.currentAction.range >= distance && currentAction.range < distance)
+        {
+            AI.VisualFeedback(AI.currentAction, true, this);
+        }
 
         if (currentAction == AI.currentAction)
         {
@@ -156,11 +171,14 @@ public class PlayerController : Controller
 
     public override void stun()
     {
-        animator.SetTrigger("Stunned");
-        currentAction = actions[7]; // Stunned
         particles[2].Play();
         stunned = true;
-        AI.warn();
+        Invoke("unstun", 1.5f);
+        attack(7); // Stunned
     }
 
+    public void unstun()
+    {
+        stunned = false;
+    }
 }

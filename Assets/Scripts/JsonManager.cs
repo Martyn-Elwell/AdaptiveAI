@@ -18,7 +18,7 @@ public class JsonManager : MonoBehaviour
     private void Start()
     {
         // Set the directory path (You can change the path as per your requirement)
-        directoryPath = Application.persistentDataPath + "/Files";
+        directoryPath = Application.persistentDataPath + "/PlayerData";
         Debug.Log(directoryPath);
 
         // Create directory if it doesn't exist

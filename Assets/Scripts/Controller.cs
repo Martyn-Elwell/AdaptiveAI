@@ -20,7 +20,10 @@ public class Controller : MonoBehaviour
     protected bool inCombat = false;
     protected bool stunned = false;
     [SerializeField] protected float health = 20;
+    [SerializeField] protected float maxHealth = 20;
+    [SerializeField] protected int score = 0;
     [SerializeField] protected Slider healthbar;
+    [SerializeField] protected TextMeshProUGUI scoreText;
 
     void Start()
     {
@@ -54,7 +57,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt(action.damage);
+                    opponenet.hurt(action.damage, this);
                 }
                 break;
             // Heavy
@@ -64,7 +67,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt(action.damage);
+                    opponenet.hurt(action.damage, this);
                 }
                 break;
             // Block
@@ -122,7 +125,7 @@ public class Controller : MonoBehaviour
     }
 
 
-    public void hurt(int damage)
+    public void hurt(int damage, Controller opponent)
     {
         particles[0].Play();
         animator.SetTrigger("Hit");
@@ -131,6 +134,9 @@ public class Controller : MonoBehaviour
         if (health <= 0)
         {
             Debug.Log(gameObject.name + " is dead");
+            opponent.winRound();
+            health = maxHealth;
+            healthbar.value = health;
         }
     }
 
@@ -159,6 +165,11 @@ public class Controller : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Debug.Log("hurtignof0");
-        character.hurt(damage);
+        character.hurt(damage, this);
+    }
+    public void winRound()
+    {
+        score += 1;
+        scoreText.text = "Score: " + score.ToString();
     }
 }
