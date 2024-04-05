@@ -23,6 +23,7 @@ MonoBehaviour:
   counters:
   - {fileID: 11400000, guid: 5225eb2d3b0835d43baa36c63caec90a, type: 2}
   - {fileID: 11400000, guid: cd1e016c12dd85945a3532400bb4b17d, type: 2}
+  - {fileID: 11400000, guid: 6bdba950f6b2ab74cab29fb4a94dd179, type: 2}
   defences:
   - {fileID: 11400000, guid: d65f13538b47a694996728ab9f932a91, type: 2}
   - {fileID: 11400000, guid: 521d49074cd0ceb4291517fb5b9e303e, type: 2}

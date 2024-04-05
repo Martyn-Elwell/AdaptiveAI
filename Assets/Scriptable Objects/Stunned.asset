@@ -22,8 +22,8 @@ MonoBehaviour:
   type: 3
   counters: []
   defences:
+  - {fileID: 11400000, guid: 2c591cd2150d48e49bc7831bce8923c2, type: 2}
   - {fileID: 11400000, guid: 5225eb2d3b0835d43baa36c63caec90a, type: 2}
-  - {fileID: 11400000, guid: cd1e016c12dd85945a3532400bb4b17d, type: 2}
   - {fileID: 11400000, guid: f46cb04d96160444aa890315be4da4a5, type: 2}
   neutral:
   - {fileID: 11400000, guid: 521d49074cd0ceb4291517fb5b9e303e, type: 2}
