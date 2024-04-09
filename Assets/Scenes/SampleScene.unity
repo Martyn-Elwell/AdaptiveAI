@@ -345,6 +345,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &536067762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 536067763}
+  - component: {fileID: 536067764}
+  m_Layer: 0
+  m_Name: HitDetection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &536067763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536067762}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.2415526, y: 3.2215626, z: 7.204465}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &536067764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536067762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfb323b59a92fbe46a6445eddb85b0a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 882410581}
+  AI: {fileID: 7374988483552658031}
+  playerAction: {fileID: 0}
+  AIAction: {fileID: 0}
 --- !u!1 &702029354
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,6 +839,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 702029354}
     - target: {fileID: 2854994246208250667, guid: a7e368b1255d2074c8c7788961d37e9b, type: 3}
+      propertyPath: detector
+      value: 
+      objectReference: {fileID: 536067764}
+    - target: {fileID: 2854994246208250667, guid: a7e368b1255d2074c8c7788961d37e9b, type: 3}
       propertyPath: healthbar
       value: 
       objectReference: {fileID: 1560765296}
@@ -874,6 +926,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 882410581}
+    - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
+      propertyPath: detector
+      value: 
+      objectReference: {fileID: 536067764}
     - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
       propertyPath: healthbar
       value: 
@@ -1368,3 +1424,4 @@ SceneRoots:
   - {fileID: 891075155}
   - {fileID: 702029358}
   - {fileID: 151154017}
+  - {fileID: 536067763}
