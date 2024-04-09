@@ -7,42 +7,49 @@ using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
-    public Animator animator;
-    protected Vector3 intialPosition;
+    [Header("References")]
+    public HitDetection detector;
+
+    [Header("Actions")]
     public List<Actions> actions;
     public Actions currentAction;
-    public GameObject mark;
+
+    [Header("Visuals")]
+    public Animator animator;
     public GameObject knifePrefab;
     [SerializeField] protected List<ParticleSystem> particles;
     public GameObject textPrefab;
     [SerializeField] protected Color color;
 
-    protected bool inCombat = false;
-    protected bool stunned = false;
+    [Header("Character Data")]
+    [SerializeField] protected bool inCombat = false;
+    [SerializeField] protected bool stunned = false;
     [SerializeField] protected float health = 20;
     [SerializeField] protected float maxHealth = 20;
     [SerializeField] protected int score = 0;
+
+    [Header("UI")]
     [SerializeField] protected Slider healthbar;
     [SerializeField] protected TextMeshProUGUI scoreText;
 
     void Start()
     {
-        intialPosition = transform.position;
         animator.fireEvents = false;
     }
 
-    public void startAction(Actions action)
+    public virtual void startAction(Actions action)
     {
+        if (inCombat ) { return; }
         currentAction = action;
         animator.SetTrigger(action.name);
         inCombat = true;
+        Invoke("EndCombat", 0.8f);
+        detector.InputAction(this, action);
         //StartCoroutine(returnCoroutine(2f));
     }
 
-    protected IEnumerator returnCoroutine(float delayTime)
+    protected void EndCombat()
     {
-        yield return new WaitForSeconds(delayTime);
-        transform.position = mark.transform.position;
         inCombat = false;
     }
 
@@ -140,6 +147,12 @@ public class Controller : MonoBehaviour
         }
     }
 
+    public void OutOfRange()
+    {
+        GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
+        txt.GetComponent<TextMeshPro>().text = "Out of Range";
+    }
+
     public virtual void stun()
     {
         animator.SetTrigger("Stunned");
@@ -156,7 +169,6 @@ public class Controller : MonoBehaviour
     public void shieldClash()
     {
         particles[3].Play();
-        Debug.Log(animator.gameObject.name);
         animator.SetTrigger("SuccesfulBlock");
     }
 
@@ -164,7 +176,6 @@ public class Controller : MonoBehaviour
     public IEnumerator delayHurt(float time, Controller character, int damage)
     {
         yield return new WaitForSeconds(time);
-        Debug.Log("hurtignof0");
         character.hurt(damage, this);
     }
     public void winRound()

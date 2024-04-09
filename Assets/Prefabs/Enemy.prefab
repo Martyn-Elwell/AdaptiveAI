@@ -602,7 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82e322a27a352844ba9f647d613d58fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 944171642851062422}
+  detector: {fileID: 0}
   actions:
   - {fileID: 11400000, guid: 2c591cd2150d48e49bc7831bce8923c2, type: 2}
   - {fileID: 11400000, guid: 5225eb2d3b0835d43baa36c63caec90a, type: 2}
@@ -613,7 +613,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d2ca9878997d214a935868b3a9e2258, type: 2}
   - {fileID: 11400000, guid: 6bdba950f6b2ab74cab29fb4a94dd179, type: 2}
   currentAction: {fileID: 0}
-  mark: {fileID: 0}
+  animator: {fileID: 944171642851062422}
   knifePrefab: {fileID: 5416666843129749042, guid: 683598fefb1f3ec498e3219f6c5b046d, type: 3}
   particles:
   - {fileID: 4652161590444753718}
@@ -622,12 +622,18 @@ MonoBehaviour:
   - {fileID: 7942422753415146564}
   textPrefab: {fileID: 553781053869993682, guid: 7c73b5950da248242821731f19a9dafe, type: 3}
   color: {r: 0.6886792, g: 0.13427073, b: 0.13427073, a: 1}
+  inCombat: 0
+  stunned: 0
   health: 20
   maxHealth: 20
   score: 0
   healthbar: {fileID: 0}
   scoreText: {fileID: 0}
   player: {fileID: 0}
+  timeSinceLastAttack: 100
+  comboTime: 2
+  algorithmType: 1
+  initialAttack: 000000000000000000000000000000000000000000000000
   debugOverride: 0
   debugOverrideNum: 0
 --- !u!114 &260133977465081160

@@ -8,7 +8,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : Controller
-{ 
+{
+    [Header("AI")]
     public AIController AI;
 
 
@@ -80,93 +81,11 @@ public class PlayerController : Controller
     {
         startAction(actions[id]);
         Actions aiAction = AI.warn();
-        float shortestTime = actions[id].impactTime;
-        if (shortestTime > aiAction.impactTime)
-        {
-            shortestTime = aiAction.impactTime;
-        }
-        Invoke("HitDetection", shortestTime);
     }
 
     public void HitDetection()
     {
-        Debug.Log("Ai uses " + AI.currentAction.name);
-
-        float distance = Vector3.Distance(transform.position, AI.transform.position);
-        //Players attack is within range
-        AI.recordAction(currentAction);
-
-        // Player in range AI not
-        if (currentAction.range >= distance && AI.currentAction.range < distance)
-        {
-            VisualFeedback(currentAction, true, AI);
-        }
-
-        // AI in range Player not
-        if (AI.currentAction.range >= distance && currentAction.range < distance)
-        {
-            AI.VisualFeedback(AI.currentAction, true, this);
-        }
-
-        if (currentAction == AI.currentAction)
-        {
-            if (currentAction.range >= distance)
-            {
-                Debug.Log("Parried");
-                if (currentAction.type == Type.Defence) { return; }
-                VisualFeedback(actions[6], true, AI);
-                AI.VisualFeedback(actions[6], true, this);
-            }
-            else
-            {
-                GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
-                txt.GetComponent<TextMeshPro>().text = "Out of Range";
-            }
-        }
-        else if (currentAction.counters.Contains(AI.currentAction))
-        {
-            if (currentAction.range >= distance)
-            {
-                Debug.Log("Player counters");
-                VisualFeedback(currentAction, true, AI);
-            }
-            else
-            {
-                GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
-                txt.GetComponent<TextMeshPro>().text = "Out of Range";
-            }
-        }
-        else if (currentAction.defences.Contains(AI.currentAction))
-        {
-            if (AI.currentAction.range >= distance)
-            {
-                Debug.Log("AI counters");
-                AI.VisualFeedback(AI.currentAction, true, this);
-            }
-            else
-            {
-                GameObject txt = Instantiate(textPrefab, AI.transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
-                txt.GetComponent<TextMeshPro>().text = "Out of Range";
-            }
-
-        }
-        else if (currentAction.neutral.Contains(AI.currentAction))
-        {
-            if (currentAction.type == Type.Defence)
-            {
-                return;
-            }
-            Debug.Log("Both attack");
-
-            if (currentAction.range >= distance)
-            {
-                VisualFeedback(currentAction, true, AI);
-            }
-            if (AI.currentAction.range >= distance)
-            {
-                AI.VisualFeedback(AI.currentAction, true, this);
-            }
-        }
+        
     }
 
     public override void stun()
@@ -174,7 +93,9 @@ public class PlayerController : Controller
         particles[2].Play();
         stunned = true;
         Invoke("unstun", 1.5f);
+        inCombat = false;
         attack(7); // Stunned
+        
     }
 
     public void unstun()
