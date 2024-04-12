@@ -846,6 +846,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7374988483552658031}
     - target: {fileID: 2854994246208250667, guid: a7e368b1255d2074c8c7788961d37e9b, type: 3}
+      propertyPath: UI
+      value: 
+      objectReference: {fileID: 1782106475}
+    - target: {fileID: 2854994246208250667, guid: a7e368b1255d2074c8c7788961d37e9b, type: 3}
       propertyPath: mark
       value: 
       objectReference: {fileID: 702029354}
@@ -913,6 +917,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1782106475 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1805820583844588268, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
+  m_PrefabInstance: {fileID: 5939496119359814281}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2a329522e1bbf4f87861367ece10f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5680637781440224477
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -929,6 +944,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
+      propertyPath: UI
+      value: 
+      objectReference: {fileID: 1782106475}
     - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
       propertyPath: mark
       value: 
