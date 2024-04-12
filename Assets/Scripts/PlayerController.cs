@@ -11,6 +11,8 @@ public class PlayerController : Controller
 {
     [Header("AI")]
     public AIController AI;
+    public float timeSinceLastAttack = 100f;
+    public float comboTime = 2f;
 
 
     public void Update()
@@ -24,6 +26,8 @@ public class PlayerController : Controller
             returnToItialPosition();
         }*/
         inputHandler();
+
+        timeSinceLastAttack += Time.deltaTime;
 
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum AIType
@@ -15,8 +16,7 @@ public class AIController : Controller
     private float idealDistance = 3f;
 
     [Header("AlgorithmData")]
-    [SerializeField] private float timeSinceLastAttack = 100f;
-    [SerializeField] private float comboTime = 2f;
+    [SerializeField] private float playerAggresionScore = 0;
     [SerializeField] private AIType algorithmType = AIType.Probabilistic;
     [SerializeField] private int[] initialAttack = new int[6];
     [SerializeField] private int[][] attackTable = new int[6][];
@@ -35,11 +35,10 @@ public class AIController : Controller
     }
     public void Update()
     {
-        timeSinceLastAttack += Time.deltaTime;
+        
         float distance = transform.position.z - player.transform.position.z;
         if (Mathf.Abs(distance - idealDistance) >= 0.2f ) { animator.SetFloat("Direction", distance - idealDistance); }
         else { animator.SetFloat("Direction", 0f) ; }
-        
     }
 
     public override void startAction(Actions action)
@@ -91,15 +90,17 @@ public class AIController : Controller
     public Actions predictAction()
     {
         Actions returnAction = actions[0];
-        if (timeSinceLastAttack >= comboTime)
+        if (player.timeSinceLastAttack >= player.comboTime)
         {
+            Debug.Log("First Attack!");
             lastAttackRecivedWasCombo = false;
 
             returnAction = SelectFromRow(initialAttack);
 
         }
-        else if (timeSinceLastAttack < comboTime)
+        else if (player.timeSinceLastAttack < player.comboTime)
         {
+            Debug.Log("Combo!");
             lastAttackRecivedWasCombo = true;
             int[] row = new int[6];
             for (int i = 0; i < attackTable[0].Length; i++)
@@ -117,8 +118,7 @@ public class AIController : Controller
             }
             returnAction = SelectFromRow(row);
         }
-
-        timeSinceLastAttack = 0f;
+        player.timeSinceLastAttack = 0f;
 
         return returnAction;
     }
@@ -130,11 +130,11 @@ public class AIController : Controller
         int total = 0;
         int highestCount = 0;
         int maxCount = 0;
+        total = Row.Sum();
 
         // Finds out total entries in that row
         for (int i = 0; i < Row.Length; i++)
         {
-            total += Row[i];
             if (Row[i] > maxCount)
             {
                 highestCount = i;
@@ -144,26 +144,29 @@ public class AIController : Controller
         // Selects the highest value 
         if (algorithmType == AIType.Deterministic)
         {
+            Debug.Log("Picking " + actions[highestCount].name + " with " + maxCount + " uses.");
             returnAction = actions[highestCount];
+            return returnAction;
         }
         // Selects the random value using 
         else
         {
-
             int randNum = Random.Range(0, total);
             int num = 0;
+            
             for (int i = 0; i < Row.Length; i++)
             {
                 num += Row[i];
                 if (num >= randNum)
                 {
                     returnAction = actions[i];
+                    return returnAction;
                 }
             }
 
         }
-
         return returnAction;
+
     }
 
     public void recordAction(Actions action)

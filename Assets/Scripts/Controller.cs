@@ -9,6 +9,7 @@ public class Controller : MonoBehaviour
 {
     [Header("References")]
     public HitDetection detector;
+    public UIController UI;
 
     [Header("Actions")]
     public List<Actions> actions;
@@ -28,9 +29,6 @@ public class Controller : MonoBehaviour
     [SerializeField] protected float maxHealth = 20;
     [SerializeField] protected int score = 0;
 
-    [Header("UI")]
-    [SerializeField] protected Slider healthbar;
-    [SerializeField] protected TextMeshProUGUI scoreText;
 
     void Start()
     {
@@ -137,13 +135,13 @@ public class Controller : MonoBehaviour
         particles[0].Play();
         animator.SetTrigger("Hit");
         health -= damage;
-        healthbar.value = health;
+        UI.UpdateHealth(this, health);
         if (health <= 0)
         {
             Debug.Log(gameObject.name + " is dead");
             opponent.winRound();
             health = maxHealth;
-            healthbar.value = health;
+            UI.UpdateHealth(this, health);
         }
     }
 
@@ -181,6 +179,6 @@ public class Controller : MonoBehaviour
     public void winRound()
     {
         score += 1;
-        scoreText.text = "Score: " + score.ToString();
+        UI.UpdateScore(this, score);
     }
 }
