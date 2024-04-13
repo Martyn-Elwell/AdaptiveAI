@@ -19,6 +19,7 @@ MonoBehaviour:
   impactTime: 0.3
   animationTime: 1
   range: 3.5
+  aggresiveness: 1
   type: 0
   counters:
   - {fileID: 11400000, guid: 5225eb2d3b0835d43baa36c63caec90a, type: 2}

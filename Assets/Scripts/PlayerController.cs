@@ -92,8 +92,19 @@ public class PlayerController : Controller
         
     }
 
-    public override void stun()
+    public override void stun(int damage, Controller opponent)
     {
+
+        health -= damage;
+        UI.UpdateHealth(this, health);
+        if (health <= 0)
+        {
+            Debug.Log(gameObject.name + " is dead");
+            opponent.winRound();
+            health = maxHealth;
+            UI.UpdateHealth(this, health);
+        }
+
         particles[2].Play();
         stunned = true;
         Invoke("unstun", 1.5f);

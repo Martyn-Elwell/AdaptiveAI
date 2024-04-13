@@ -20,6 +20,7 @@ public class Actions : ScriptableObject
     public float impactTime;
     public float animationTime;
     public float range;
+    public int aggresiveness;
     public Type type;
     public List<Actions> counters;
     public List<Actions> defences;

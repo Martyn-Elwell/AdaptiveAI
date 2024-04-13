@@ -16,7 +16,12 @@ public class AIController : Controller
     private float idealDistance = 3f;
 
     [Header("AlgorithmData")]
+    [SerializeField] public float playerAttackCount = 0;
+    [SerializeField] private float playerAggresionTotal = 0;
     [SerializeField] private float playerAggresionScore = 0;
+    [SerializeField] public float aggresionWeighting = 1;
+    [SerializeField] private float confidenceScore = 0;
+    [SerializeField] public float confidenceWeighting = 1;
     [SerializeField] private AIType algorithmType = AIType.Probabilistic;
     [SerializeField] private int[] initialAttack = new int[6];
     [SerializeField] private int[][] attackTable = new int[6][];
@@ -33,6 +38,7 @@ public class AIController : Controller
             attackTable[i] = new int[6];
         }
     }
+
     public void Update()
     {
         
@@ -85,10 +91,9 @@ public class AIController : Controller
         player.HitDetection();
     }
 
-
-
     public Actions predictAction()
     {
+        
         Actions returnAction = actions[0];
         if (player.timeSinceLastAttack >= player.comboTime)
         {
@@ -125,8 +130,8 @@ public class AIController : Controller
 
     private Actions SelectFromRow(int[] Row)
     {
-        Actions returnAction = actions[0];
-
+        Actions predictedAction = actions[0];
+        Actions returnAction;
         int total = 0;
         int highestCount = 0;
         int maxCount = 0;
@@ -145,8 +150,7 @@ public class AIController : Controller
         if (algorithmType == AIType.Deterministic)
         {
             Debug.Log("Picking " + actions[highestCount].name + " with " + maxCount + " uses.");
-            returnAction = actions[highestCount];
-            return returnAction;
+            predictedAction = actions[highestCount];
         }
         // Selects the random value using 
         else
@@ -159,19 +163,49 @@ public class AIController : Controller
                 num += Row[i];
                 if (num >= randNum)
                 {
-                    returnAction = actions[i];
-                    return returnAction;
+                    predictedAction = actions[i];
                 }
             }
 
         }
-        return returnAction;
 
+        returnAction = SelectDefence(predictedAction);
+        return returnAction;
+    }
+
+    public Actions SelectDefence(Actions predictedAction)
+    {
+        List<Actions> defences = new List<Actions>(predictedAction.defences);
+        Actions selectedAction = defences[0];
+        float closestDifference = Mathf.Abs(playerAggresionScore - selectedAction.aggresiveness);
+        foreach (Actions action in predictedAction.defences)
+        {
+            Debug.Log("Counters are: " + action.name);
+        }
+        if (defences.Count == 0)
+        {
+            return predictedAction;
+        }
+
+        for (int i = 1; i < defences.Count; i++)
+        {
+            float difference = Mathf.Abs(playerAggresionScore - defences[i].aggresiveness);
+
+            // Check if the current Move has a closer aggression value
+            if (difference < closestDifference)
+            {
+                selectedAction = defences[i];
+                closestDifference = difference;
+            }
+        }
+        return selectedAction;
     }
 
     public void recordAction(Actions action)
     {
-
+        playerAttackCount++;
+        playerAggresionTotal += action.aggresiveness;
+        playerAggresionScore = playerAggresionTotal / playerAttackCount;
 
         if (lastAttackRecivedWasCombo == false)
         {
@@ -183,6 +217,8 @@ public class AIController : Controller
             attackTable[previousIndex][action.ID] += 1;
         }
     }
+
+
 
     public Actions randomAction()
     {

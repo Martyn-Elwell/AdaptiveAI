@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.ComponentModel;
 
 public class Controller : MonoBehaviour
 {
@@ -102,7 +103,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.stun();
+                    opponenet.stun(action.damage, this);
                 }
                 break;
             // Ranged
@@ -151,12 +152,21 @@ public class Controller : MonoBehaviour
         txt.GetComponent<TextMeshPro>().text = "Out of Range";
     }
 
-    public virtual void stun()
+    public virtual void stun(int damage, Controller opponent)
     {
         animator.SetTrigger("Stunned");
         currentAction = actions[7]; // Stunned
         particles[2].Play();
         stunned = true;
+        health -= damage;
+        UI.UpdateHealth(this, health);
+        if (health <= 0)
+        {
+            Debug.Log(gameObject.name + " is dead");
+            opponent.winRound();
+            health = maxHealth;
+            UI.UpdateHealth(this, health);
+        }
     }
 
     public void sparks()
