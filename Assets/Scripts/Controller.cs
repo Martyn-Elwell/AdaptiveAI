@@ -38,7 +38,8 @@ public class Controller : MonoBehaviour
 
     public virtual void startAction(Actions action)
     {
-        if (inCombat ) { return; }
+        if (inCombat ) {
+            return; }
         currentAction = action;
         animator.SetTrigger(action.name);
         inCombat = true;

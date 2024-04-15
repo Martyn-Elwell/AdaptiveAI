@@ -6,6 +6,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static System.Collections.Specialized.BitVector32;
 
 public class PlayerController : Controller
 {
@@ -13,7 +14,7 @@ public class PlayerController : Controller
     public AIController AI;
     public float timeSinceLastAttack = 100f;
     public float comboTime = 2f;
-
+    public int comboScore;
 
     public void Update()
     {
@@ -28,7 +29,11 @@ public class PlayerController : Controller
         inputHandler();
 
         timeSinceLastAttack += Time.deltaTime;
-
+        if (timeSinceLastAttack >= comboTime)
+        {
+            comboScore = 0;
+            UI.UpdateComboCount(comboScore);
+        }
     }
 
     public void inputHandler()
@@ -83,8 +88,20 @@ public class PlayerController : Controller
 
     public void attack(int id)
     {
-        startAction(actions[id]);
+        if (timeSinceLastAttack <= comboTime)
+        {
+            comboScore++;
+        }
+        else
+        {
+            comboScore = 0;
+        }
+        timeSinceLastAttack = 0;
+        UI.UpdateComboCount(comboScore);
+
         Actions aiAction = AI.warn();
+        startAction(actions[id]);
+
     }
 
     public void HitDetection()
@@ -109,8 +126,19 @@ public class PlayerController : Controller
         stunned = true;
         Invoke("unstun", 1.5f);
         inCombat = false;
-        attack(7); // Stunned
-        
+
+        comboScore = 0;
+        UI.UpdateComboCount(comboScore);
+
+        Invoke("ApplyStun", 0.2f);
+
+
+    }
+
+    public void ApplyStun()
+    {
+        Actions aiAction = AI.punish();
+        startAction(actions[7]);
     }
 
     public void unstun()

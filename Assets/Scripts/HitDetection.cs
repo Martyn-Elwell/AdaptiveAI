@@ -36,13 +36,16 @@ public class HitDetection : MonoBehaviour
         {
             AIAction = action;
         }
+        CancelInvoke("ResetActions");
         IntiateHitDetection();
     }
 
 
     public void RunHitDetection()
     {
-        if (playerAction == null || AIAction == null) { return; }
+        if (playerAction == null &&  AIAction == null) { Debug.Log("NULLS"); return; }
+        if (playerAction == null) { playerAction = player.actions[7]; }
+        if (AIAction == null) { AIAction = AI.actions[7]; }
 
         float distance = Vector3.Distance(player.transform.position, AI.transform.position);
         //Players attack is within range
@@ -78,7 +81,7 @@ public class HitDetection : MonoBehaviour
         {
             if (playerAction.range >= distance)
             {
-                Debug.Log("Player counters");
+                Debug.Log("Player counters with " + playerAction.name);
                 player.VisualFeedback(playerAction, true, AI);
             }
             else
@@ -90,7 +93,7 @@ public class HitDetection : MonoBehaviour
         {
             if (AIAction.range >= distance)
             {
-                Debug.Log("AI counters");
+                Debug.Log("AI counters with " + AIAction.name);
                 AI.VisualFeedback(AIAction, true, player);
             }
             else
@@ -120,5 +123,10 @@ public class HitDetection : MonoBehaviour
         AIAction = null;
         playerAction = null;
 
+    }
+
+    public void ResetActions()
+    {
+        
     }
 }

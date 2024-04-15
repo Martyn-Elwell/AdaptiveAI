@@ -42,7 +42,20 @@ public class UIController : MonoBehaviour
 
     public void UpdateComboCount(int comboCount)
     {
-        comboText.text = comboCount.ToString();
+        if (comboCount == 0)
+        {
+            comboText.gameObject.SetActive(false);
+        }
+        else if (comboCount >= 1)
+        {
+            if (comboText.gameObject.activeSelf == false)
+            {
+                comboText.gameObject.SetActive(true);
+            }
+
+            comboText.text = comboCount.ToString();
+        }
+        
     }
 
 

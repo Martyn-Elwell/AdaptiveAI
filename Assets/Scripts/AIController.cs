@@ -1,3 +1,4 @@
+using RPGCharacterAnims.Actions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,11 @@ public enum AIType
 {
     Deterministic = 0,
     Probabilistic = 1,
+}
+public enum ResponseType
+{
+    Random = 0,
+    Weighted = 1,
 }
 
 public class AIController : Controller
@@ -23,6 +29,7 @@ public class AIController : Controller
     [SerializeField] private float confidenceScore = 0;
     [SerializeField] public float confidenceWeighting = 1;
     [SerializeField] private AIType algorithmType = AIType.Probabilistic;
+    [SerializeField] private ResponseType counterType = ResponseType.Random;
     [SerializeField] private int[] initialAttack = new int[6];
     [SerializeField] private int[][] attackTable = new int[6][];
     private bool lastAttackRecivedWasCombo = false;
@@ -77,18 +84,31 @@ public class AIController : Controller
         return predictedAction;
     }
 
-    public void punish()
+    public Actions punish()
     {
-        Actions predictedAction = predictAction();
-        currentAction = predictedAction;
-        startAction(predictedAction);
-        wait(1f);
+        Actions action = actions[1];
+        //inCombat = false;
+        currentAction = action;
+        startAction(action);
+        return action;
     }
 
     private IEnumerator wait(float time)
     {
         yield return new WaitForSeconds(time);
         player.HitDetection();
+    }
+
+    public Actions punishAction()
+    {
+        List<Actions> offenseAction = new List<Actions>();
+        offenseAction.Add(actions[0]);
+        offenseAction.Add(actions[1]);
+        offenseAction.Add(actions[4]);
+        offenseAction.Add(actions[5]);
+        Actions returnAction = actions[Random.Range(0, offenseAction.Count)];
+        currentAction = returnAction;
+        return returnAction;
     }
 
     public Actions predictAction()
@@ -99,8 +119,13 @@ public class AIController : Controller
         {
             Debug.Log("First Attack!");
             lastAttackRecivedWasCombo = false;
-
+            if (initialAttack.Length == 0)
+            {
+                returnAction = randomAction();
+                return returnAction;
+            }
             returnAction = SelectFromRow(initialAttack);
+
 
         }
         else if (player.timeSinceLastAttack < player.comboTime)
@@ -112,6 +137,12 @@ public class AIController : Controller
             {
                 try
                 {
+                    if (attackTable[previousIndex].Length == 0)
+                    {
+                        returnAction = randomAction();
+                        return returnAction;
+                    }
+
                     row[i] = attackTable[previousIndex][i];
                 }
                 catch
@@ -130,6 +161,7 @@ public class AIController : Controller
 
     private Actions SelectFromRow(int[] Row)
     {
+        
         Actions predictedAction = actions[0];
         Actions returnAction;
         int total = 0;
@@ -144,6 +176,10 @@ public class AIController : Controller
             {
                 highestCount = i;
                 maxCount = Row[i];
+                if (total != 0)
+                {
+                    confidenceScore = Row[i] / total;
+                }
             }
         }
         // Selects the highest value 
@@ -164,17 +200,23 @@ public class AIController : Controller
                 if (num >= randNum)
                 {
                     predictedAction = actions[i];
+                    if (total != 0)
+                    {
+                        confidenceScore = Row[i] / total;
+                    }
+                    
                 }
             }
 
         }
-
+        
         returnAction = SelectDefence(predictedAction);
         return returnAction;
     }
 
     public Actions SelectDefence(Actions predictedAction)
     {
+        Debug.LogWarning("AI PREDICTS " + predictedAction.name);
         List<Actions> defences = new List<Actions>(predictedAction.defences);
         Actions selectedAction = defences[0];
         float closestDifference = Mathf.Abs(playerAggresionScore - selectedAction.aggresiveness);
@@ -187,22 +229,37 @@ public class AIController : Controller
             return predictedAction;
         }
 
-        for (int i = 1; i < defences.Count; i++)
-        {
-            float difference = Mathf.Abs(playerAggresionScore - defences[i].aggresiveness);
 
-            // Check if the current Move has a closer aggression value
-            if (difference < closestDifference)
+        if (counterType == ResponseType.Random)
+        {
+            int randNum = Random.Range(0, defences.Count);
+            selectedAction = defences[randNum];
+        }
+        else if (counterType == ResponseType.Weighted)
+        {
+            for (int i = 1; i < defences.Count; i++)
             {
-                selectedAction = defences[i];
-                closestDifference = difference;
+                // Act more aggresively if confident
+                float difference = Mathf.Abs((playerAggresionScore /*+ confidenceWeighting * confidenceWeighting * 2*/) - defences[i].aggresiveness);
+
+                // Check if the current Move has a closer aggression value
+                if (difference < closestDifference)
+                {
+                    selectedAction = defences[i];
+                    closestDifference = difference;
+                }
             }
+            Debug.LogWarning("selected Action aggression is " + selectedAction.aggresiveness);
+            Debug.LogWarning("aggresion score is  " + playerAggresionScore);
+
+
         }
         return selectedAction;
     }
 
     public void recordAction(Actions action)
     {
+        if (action.ID > 6) { return; }
         playerAttackCount++;
         playerAggresionTotal += action.aggresiveness;
         playerAggresionScore = playerAggresionTotal / playerAttackCount;
