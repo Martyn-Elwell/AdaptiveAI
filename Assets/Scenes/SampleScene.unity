@@ -969,8 +969,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 856628999}
     - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
-      propertyPath: algorithmType
+      propertyPath: counterType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
+      propertyPath: algorithmType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3526136025573092322, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
       propertyPath: playOnAwake
@@ -1299,6 +1303,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4337686940356767415, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4592200180161186848, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4672834568052076075, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
