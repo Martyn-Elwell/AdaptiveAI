@@ -192,18 +192,20 @@ public class AIController : Controller
         else
         {
             int randNum = Random.Range(0, total);
-            int num = 0;
+            int cumulativeSum = 0;
             
             for (int i = 0; i < Row.Length; i++)
             {
-                num += Row[i];
-                if (num >= randNum)
+                cumulativeSum += Row[i];
+                if (randNum < cumulativeSum)
                 {
                     predictedAction = actions[i];
+
                     if (total != 0)
                     {
                         confidenceScore = Row[i] / total;
                     }
+                    break;
                     
                 }
             }
