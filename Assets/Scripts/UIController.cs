@@ -13,6 +13,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private Slider AiHealthbar;
     [SerializeField] private TextMeshProUGUI AiScoreText;
     [SerializeField] private TextMeshProUGUI comboText;
+    [SerializeField] private TextMeshProUGUI AiPredcitionCountText;
+    [SerializeField] private TextMeshProUGUI AiAccuracyText;
 
 
     public void UpdateHealth(Controller character, float health)
@@ -56,6 +58,16 @@ public class UIController : MonoBehaviour
             comboText.text = comboCount.ToString();
         }
         
+    }
+
+    public void UpdateAccuracy(float count, float accuracy)
+    {
+        Debug.LogWarning(accuracy * 100);
+
+        string input = (accuracy*100).ToString("0.0") + "%";
+        AiPredcitionCountText.text = count.ToString();
+        AiAccuracyText.text = input;
+
     }
 
 

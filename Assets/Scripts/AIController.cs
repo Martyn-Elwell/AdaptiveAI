@@ -22,6 +22,9 @@ public class AIController : Controller
     private float idealDistance = 3f;
 
     [Header("AlgorithmData")]
+    [SerializeField] public Actions savedPredictedAction;
+    [SerializeField] public float correctPredictions = 0;
+    [SerializeField] public float totalPredictions = 0;
     [SerializeField] public float playerAttackCount = 0;
     [SerializeField] private float playerAggresionTotal = 0;
     [SerializeField] private float playerAggresionScore = 0;
@@ -140,7 +143,7 @@ public class AIController : Controller
                     if (attackTable[previousIndex].Length == 0)
                     {
                         returnAction = randomAction();
-                        return returnAction;
+                        return returnAction; 
                     }
 
                     row[i] = attackTable[previousIndex][i];
@@ -155,7 +158,7 @@ public class AIController : Controller
             returnAction = SelectFromRow(row);
         }
         player.timeSinceLastAttack = 0f;
-
+        
         return returnAction;
     }
 
@@ -211,7 +214,9 @@ public class AIController : Controller
             }
 
         }
-        
+        savedPredictedAction = predictedAction;
+        Debug.LogWarning("AI PREDICTS" + predictedAction.name);
+        totalPredictions++;
         returnAction = SelectDefence(predictedAction);
         return returnAction;
     }
@@ -259,6 +264,17 @@ public class AIController : Controller
         return selectedAction;
     }
 
+    public void CorrectPrediction()
+    {
+        correctPredictions++;
+        float predictionPercent = correctPredictions / totalPredictions;
+        UI.UpdateAccuracy(correctPredictions, predictionPercent);
+    }
+    public void InCorrectPrediction()
+    {
+        float predictionPercent = correctPredictions / totalPredictions;
+        UI.UpdateAccuracy(correctPredictions, predictionPercent);
+    }
     public void recordAction(Actions action)
     {
         if (action.ID > 6) { return; }

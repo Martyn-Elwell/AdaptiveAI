@@ -974,7 +974,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2542055616219237810, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
       propertyPath: algorithmType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3526136025573092322, guid: 3db7251b395e6f54983580b8e643384e, type: 3}
       propertyPath: playOnAwake
@@ -1041,6 +1041,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 575492850733564851, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1069000875184322954, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1412,6 +1416,10 @@ PrefabInstance:
     - target: {fileID: 6976359367783716457, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7610927376723227807, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8300731653196517155, guid: a2970e0bb29f4874aa33309ba46fe039, type: 3}
       propertyPath: m_AnchorMax.y

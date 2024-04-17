@@ -119,7 +119,15 @@ public class HitDetection : MonoBehaviour
                 AI.VisualFeedback(AIAction, true, player);
             }
         }
-
+        Debug.LogWarning("AI: " + AI.savedPredictedAction.name + "| Player: " + playerAction.name);
+        if (AI.savedPredictedAction == playerAction)
+        {
+            AI.CorrectPrediction();
+        }
+        else
+        {
+            AI.InCorrectPrediction();
+        }
         AIAction = null;
         playerAction = null;
 
