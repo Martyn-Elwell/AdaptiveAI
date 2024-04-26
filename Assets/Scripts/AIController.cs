@@ -51,11 +51,23 @@ public class AIController : Controller
 
     public void Update()
     {
-        
-        float distance = transform.position.z - player.transform.position.z;
-        if (Mathf.Abs(distance - idealDistance) >= 0.2f ) { animator.SetFloat("Direction", distance - idealDistance); }
-        else { animator.SetFloat("Direction", 0f) ; }
+
+        MovementHandler();
     }
+
+    public void MovementHandler()
+    {
+        float distance = transform.position.z - player.transform.position.z;
+        if (Mathf.Abs(distance - idealDistance) >= 0.2f)
+        {
+            animator.SetFloat("Direction", distance - idealDistance);
+        }
+        else
+        {
+            animator.SetFloat("Direction", 0f);
+        }
+    }
+
 
     public override void startAction(Actions action)
     {
@@ -215,7 +227,7 @@ public class AIController : Controller
 
         }
         savedPredictedAction = predictedAction;
-        Debug.LogWarning("AI PREDICTS" + predictedAction.name);
+
         totalPredictions++;
         returnAction = SelectDefence(predictedAction);
         return returnAction;
@@ -223,14 +235,11 @@ public class AIController : Controller
 
     public Actions SelectDefence(Actions predictedAction)
     {
-        Debug.LogWarning("AI PREDICTS " + predictedAction.name);
         List<Actions> defences = new List<Actions>(predictedAction.defences);
         Actions selectedAction = defences[0];
         float closestDifference = Mathf.Abs(playerAggresionScore - selectedAction.aggresiveness);
-        foreach (Actions action in predictedAction.defences)
-        {
-            Debug.Log("Counters are: " + action.name);
-        }
+
+
         if (defences.Count == 0)
         {
             return predictedAction;

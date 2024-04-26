@@ -25,6 +25,8 @@ public class Controller : MonoBehaviour
 
     [Header("Character Data")]
     [SerializeField] protected bool inCombat = false;
+    [Range(0.5f,2f)]
+    [SerializeField] protected float inCombatCooldown = 1f;
     [SerializeField] protected bool stunned = false;
     [SerializeField] protected float health = 20;
     [SerializeField] protected float maxHealth = 20;
@@ -38,14 +40,15 @@ public class Controller : MonoBehaviour
 
     public virtual void startAction(Actions action)
     {
-        if (inCombat ) {
-            return; }
+        if (inCombat ) {return; }
+
         currentAction = action;
         animator.SetTrigger(action.name);
+
         inCombat = true;
-        Invoke("EndCombat", 0.8f);
+        Invoke("EndCombat", inCombatCooldown);
+
         detector.InputAction(this, action);
-        //StartCoroutine(returnCoroutine(2f));
     }
 
     protected void EndCombat()
@@ -109,7 +112,7 @@ public class Controller : MonoBehaviour
                 break;
             // Ranged
             case 5:
-                GameObject knife = Instantiate(knifePrefab, transform.position + Vector3.up * 2f, Quaternion.Euler(0f, 0f, 90f));
+                GameObject knife = Instantiate(knifePrefab, transform.position + Vector3.up * 2f, Quaternion.LookRotation(transform.forward));
                 if (sucess)
                 {
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform); ;

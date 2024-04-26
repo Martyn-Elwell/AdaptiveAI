@@ -26,7 +26,7 @@ public class PlayerController : Controller
         {
             returnToItialPosition();
         }*/
-        inputHandler();
+        InputHandler();
 
         timeSinceLastAttack += Time.deltaTime;
         if (timeSinceLastAttack >= comboTime)
@@ -36,54 +36,46 @@ public class PlayerController : Controller
         }
     }
 
-    public void inputHandler()
+    public void InputHandler()
     {
-        Gamepad gamepad = Gamepad.current;
+        if (stunned) { return; }
+        if (inCombat) { return; }
 
+        // Horizontal Movement
         float horizontalInput = Input.GetAxis("Horizontal");
         animator.SetFloat("Direction", horizontalInput);
-        if (stunned) { return; }
+
+        // Input keys for action
         if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            //Debug.Log("A is pressed!");
-            // Dodge
+            // A: Dodge
             attack(3);
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton1) || Input.GetKeyDown(KeyCode.Alpha2))
         {
-            //Debug.Log("B is pressed!");
-            // Heavy
+            // B: Heavy
             attack(1);
-
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton2) || Input.GetKeyDown(KeyCode.Alpha3))
         {
-            //Debug.Log("X is pressed!");
-            // Light
+            // X: Light
             attack(0);
-
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton3) || Input.GetKeyDown(KeyCode.Alpha4))
         {
-            //Debug.Log("Y is pressed!");
-            // Stun
+            // Y: Stun
             attack(4);
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton4) || Input.GetKeyDown(KeyCode.Alpha5))
         {
-            //Debug.Log("LB is pressed!");
-            // Block
+            // LB: Block
             attack(2);
         }
         if (Input.GetKeyDown(KeyCode.JoystickButton5) || Input.GetKeyDown(KeyCode.Alpha6))
         {
-            //Debug.Log("RB is pressed!");
-            // Ranged
+            // RB: Ranged
             attack(5);
-
         }
-        //if (gamepad.leftTrigger.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha7)) {Debug.Log("LT is pressed!");}
-        //if (gamepad.rightTrigger.wasPressedThisFrame || Input.GetKeyDown(KeyCode.Alpha8)) {Debug.Log("RT is pressed!");}
     }
 
     public void attack(int id)
