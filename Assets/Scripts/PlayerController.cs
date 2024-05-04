@@ -92,7 +92,7 @@ public class PlayerController : Controller
         UI.UpdateComboCount(comboScore);
 
         Actions aiAction = AI.warn();
-        startAction(actions[id]);
+        StartAction(actions[id]);
 
     }
 
@@ -130,7 +130,7 @@ public class PlayerController : Controller
     public void ApplyStun()
     {
         Actions aiAction = AI.punish();
-        startAction(actions[7]);
+        StartAction(actions[7]);
     }
 
     public void unstun()

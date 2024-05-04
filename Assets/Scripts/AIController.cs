@@ -69,7 +69,7 @@ public class AIController : Controller
     }
 
 
-    public override void startAction(Actions action)
+    public override void StartAction(Actions action)
     {
         currentAction = action;
         animator.SetTrigger(action.name);
@@ -95,7 +95,7 @@ public class AIController : Controller
             Debug.Log("Stun is reset");
         }
         currentAction = predictedAction;
-        startAction(predictedAction);
+        StartAction(predictedAction);
         return predictedAction;
     }
 
@@ -104,7 +104,7 @@ public class AIController : Controller
         Actions action = actions[1];
         //inCombat = false;
         currentAction = action;
-        startAction(action);
+        StartAction(action);
         return action;
     }
 

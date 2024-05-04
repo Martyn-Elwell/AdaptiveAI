@@ -38,7 +38,7 @@ public class Controller : MonoBehaviour
         animator.fireEvents = false;
     }
 
-    public virtual void startAction(Actions action)
+    public virtual void StartAction(Actions action)
     {
         if (inCombat ) {return; }
 
@@ -56,7 +56,7 @@ public class Controller : MonoBehaviour
         inCombat = false;
     }
 
-    public void VisualFeedback(Actions action, bool sucess, Controller opponenet)
+    public void VisualFeedback(Actions action, bool sucess, Controller opponent)
     {
         switch (action.ID)
         {
@@ -67,7 +67,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt(action.damage, this);
+                    opponent.hurt(action.damage, this);
                 }
                 break;
             // Heavy
@@ -77,7 +77,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.hurt(action.damage, this);
+                    opponent.hurt(action.damage, this);
                 }
                 break;
             // Block
@@ -97,7 +97,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    //opponenet.hurt();
+                    //opponent.hurt();
                 }
                 break;
             // Stun
@@ -107,7 +107,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    opponenet.stun(action.damage, this);
+                    opponent.stun(action.damage, this);
                 }
                 break;
             // Ranged
@@ -118,7 +118,7 @@ public class Controller : MonoBehaviour
                     GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform); ;
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
-                    StartCoroutine(delayHurt(0.3f, opponenet, action.damage));
+                    StartCoroutine(delayHurt(0.3f, opponent, action.damage));
                 }
                 break;
             // Parried
