@@ -33,8 +33,8 @@ public class AIController : Controller
     [SerializeField] public float confidenceWeighting = 1;
     [SerializeField] private AIType algorithmType = AIType.Probabilistic;
     [SerializeField] private ResponseType counterType = ResponseType.Random;
-    [SerializeField] private int[] initialAttack = new int[6];
-    [SerializeField] private int[][] attackTable = new int[6][];
+    [SerializeField] public int[] initialAttack = new int[6];
+    [SerializeField] public int[][] attackTable = new int[6][];
     private bool lastAttackRecivedWasCombo = false;
     private int previousIndex = 0;
 
@@ -310,6 +310,8 @@ public class AIController : Controller
         if (debugOverride) { returnAction = actions[debugOverrideNum]; }
         return returnAction;
     }
+
+
 
 
 }

@@ -64,12 +64,15 @@ public class Controller : MonoBehaviour
             case 0:
                 if (sucess)
                 {
-                    GameObject txt = Instantiate(textPrefab, transform.position + Vector3.up * 2.5f, Quaternion.Euler(0f, 270f, 0f), transform);
+                    GameObject txt = Instantiate
+                        (textPrefab, transform.position + Vector3.up * 2.5f,
+                        Quaternion.Euler(0f, 270f, 0f), transform);
                     txt.GetComponent<TextMeshPro>().text = action.Description;
                     txt.GetComponent<TextMeshPro>().color = color;
                     opponent.hurt(action.damage, this);
                 }
                 break;
+
             // Heavy
             case 1:
                 if (sucess)

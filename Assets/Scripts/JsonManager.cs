@@ -1,19 +1,31 @@
 using UnityEngine;
 using System.IO;
+using UnityEditor;
 
 // Example data structure
 [System.Serializable]
 public class PlayerData
 {
+    public int[] initialAttack = new int[6];
     // 2D array of ints, 6x6
-    public int[,] playerGrid = new int[6, 6];
-    public string test = "test";
+    public int[][] attackTable = new int[6][];
+
+    public PlayerData()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            attackTable[i] = new int[6];
+        }
+    }
 }
 
 public class JsonManager : MonoBehaviour
 {
     // Directory where JSON files are stored
     private string directoryPath;
+    private string filePath = "";
+    [SerializeField] AIController AI;
+    private bool saved = false;
 
     private void Start()
     {
@@ -29,7 +41,6 @@ public class JsonManager : MonoBehaviour
 
         // Find the next available file name
         int fileNumber = 1;
-        string filePath = "";
         do
         {
             filePath = directoryPath + "/playerData_" + fileNumber + ".json";
@@ -37,24 +48,26 @@ public class JsonManager : MonoBehaviour
         }
         while (File.Exists(filePath)); // Continue until a non-existing file name is found
 
-        // Example usage
-        PlayerData player = new PlayerData();
-        player.playerGrid[0, 0] = 1; // Example data
-        player.playerGrid[1, 1] = 2; // Example data
-
-        // Write data to JSON file
-        WriteToJson(filePath, player);
-
-        // Read data from JSON file
-        PlayerData loadedPlayer = ReadFromJson(filePath);
-
-        // Example usage of loaded data
-        Debug.Log("Player Grid[0, 0]: " + loadedPlayer.playerGrid[0, 0]);
-        Debug.Log("Player Grid[1, 1]: " + loadedPlayer.playerGrid[1, 1]);
+        
     }
 
-    // Method to write data to JSON file
-    private void WriteToJson(string filePath, PlayerData data)
+    private void Update()
+    {
+        if (!saved)
+        {
+            if (Input.GetKeyDown(KeyCode.JoystickButton6) || Input.GetKeyDown(KeyCode.J))
+            {
+                saved = true;
+                PlayerData player = new PlayerData();
+                player = CreateNewRecord(AI.initialAttack, AI.attackTable);
+                SaveNewRecord(player);
+            }
+        }
+        
+    }
+
+        // Method to write data to JSON file
+        private void WriteToJson(string filePath, PlayerData data)
     {
         string jsonData = JsonUtility.ToJson(data);
         File.WriteAllText(filePath, jsonData);
@@ -73,5 +86,36 @@ public class JsonManager : MonoBehaviour
             Debug.LogError("JSON file not found!");
             return null;
         }
+    }
+
+    public PlayerData CreateNewRecord(int[] intialInput, int[][] attackInput)
+    {
+        PlayerData player = new PlayerData();
+        player.attackTable = attackInput;
+
+        for (int i = 0; i < intialInput.Length; i++)
+        {
+            player.initialAttack[i] = intialInput[i];
+        }
+
+        Debug.Log(attackInput.Length);
+        Debug.Log(attackInput[0].Length);
+
+        for (int i = 0; i < attackInput.Length; i++)
+        {
+            for (int j = 0; i < attackInput[0].Length; j++)
+            {
+                ;
+            }
+        }
+
+        return player;
+
+    }
+
+    public void SaveNewRecord(PlayerData data)
+    {
+        // Write data to JSON file
+        WriteToJson(filePath, data);
     }
 }
