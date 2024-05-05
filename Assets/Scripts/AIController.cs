@@ -34,7 +34,7 @@ public class AIController : Controller
     [SerializeField] private AIType algorithmType = AIType.Probabilistic;
     [SerializeField] private ResponseType counterType = ResponseType.Random;
     [SerializeField] public int[] initialAttack = new int[6];
-    [SerializeField] public int[][] attackTable = new int[6][];
+    [SerializeField] public int[,] attackTable = new int[6,6];
     private bool lastAttackRecivedWasCombo = false;
     private int previousIndex = 0;
 
@@ -43,10 +43,7 @@ public class AIController : Controller
     [Range(0, 5)] public int debugOverrideNum;
     public void Start()
     {
-        for (int i = 0; i < 6; i++)
-        {
-            attackTable[i] = new int[6];
-        }
+
     }
 
     public void Update()
@@ -147,25 +144,22 @@ public class AIController : Controller
         {
             Debug.Log("Combo!");
             lastAttackRecivedWasCombo = true;
+
+            if (attackTable.Length == 0)
+            {
+                returnAction = randomAction();
+                return returnAction;
+            }
+
             int[] row = new int[6];
-            for (int i = 0; i < attackTable[0].Length; i++)
+            for (int i = 0; i < 6; i++)
             {
                 try
                 {
-                    if (attackTable[previousIndex].Length == 0)
-                    {
-                        returnAction = randomAction();
-                        return returnAction; 
-                    }
-
-                    row[i] = attackTable[previousIndex][i];
+                    row[i] = attackTable[previousIndex, i];
                 }
-                catch
-                {
-                    Debug.LogError("Previous attack index: " + previousIndex);
-                    Debug.LogError("Previous attack was: " + player.actions[previousIndex]);
-                    Debug.LogError("i: " + i);
-                }
+                catch { }
+                
             }
             returnAction = SelectFromRow(row);
         }
@@ -298,7 +292,7 @@ public class AIController : Controller
         }
         else if (lastAttackRecivedWasCombo == true)
         {
-            attackTable[previousIndex][action.ID] += 1;
+            attackTable[previousIndex,action.ID] += 1;
         }
     }
 

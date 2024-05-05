@@ -8,15 +8,7 @@ public class PlayerData
 {
     public int[] initialAttack = new int[6];
     // 2D array of ints, 6x6
-    public int[][] attackTable = new int[6][];
-
-    public PlayerData()
-    {
-        for (int i = 0; i < 6; i++)
-        {
-            attackTable[i] = new int[6];
-        }
-    }
+    public int[,] attackTable = new int[6,6];
 }
 
 public class JsonManager : MonoBehaviour
@@ -24,14 +16,16 @@ public class JsonManager : MonoBehaviour
     // Directory where JSON files are stored
     private string directoryPath;
     private string filePath = "";
-    [SerializeField] AIController AI;
+    public AIController AI;
     private bool saved = false;
 
     private void Start()
     {
         // Set the directory path (You can change the path as per your requirement)
-        directoryPath = Application.persistentDataPath + "/PlayerData";
+        directoryPath = Application.dataPath + "/PlayerData";
         Debug.Log(directoryPath);
+
+
 
         // Create directory if it doesn't exist
         if (!Directory.Exists(directoryPath))
@@ -58,8 +52,11 @@ public class JsonManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.JoystickButton6) || Input.GetKeyDown(KeyCode.J))
             {
                 saved = true;
-                PlayerData player = new PlayerData();
-                player = CreateNewRecord(AI.initialAttack, AI.attackTable);
+                Record player = new Record();
+                AI = FindAnyObjectByType<AIController>();
+                player.initialAttack = AI.initialAttack;
+                player.attackTable = AI.attackTable;
+
                 SaveNewRecord(player);
             }
         }
@@ -67,19 +64,19 @@ public class JsonManager : MonoBehaviour
     }
 
         // Method to write data to JSON file
-        private void WriteToJson(string filePath, PlayerData data)
+        private void WriteToJson(string filePath, Record data)
     {
         string jsonData = JsonUtility.ToJson(data);
         File.WriteAllText(filePath, jsonData);
     }
 
     // Method to read data from JSON file
-    private PlayerData ReadFromJson(string filePath)
+    private Record ReadFromJson(string filePath)
     {
         if (File.Exists(filePath))
         {
             string jsonData = File.ReadAllText(filePath);
-            return JsonUtility.FromJson<PlayerData>(jsonData);
+            return JsonUtility.FromJson<Record>(jsonData);
         }
         else
         {
@@ -88,32 +85,16 @@ public class JsonManager : MonoBehaviour
         }
     }
 
-    public PlayerData CreateNewRecord(int[] intialInput, int[][] attackInput)
+    public Record CreateNewRecord(int[] intialInput, int[,] attackInput)
     {
-        PlayerData player = new PlayerData();
+        Record player = new Record();
+        player.initialAttack = intialInput;
         player.attackTable = attackInput;
 
-        for (int i = 0; i < intialInput.Length; i++)
-        {
-            player.initialAttack[i] = intialInput[i];
-        }
-
-        Debug.Log(attackInput.Length);
-        Debug.Log(attackInput[0].Length);
-
-        for (int i = 0; i < attackInput.Length; i++)
-        {
-            for (int j = 0; i < attackInput[0].Length; j++)
-            {
-                ;
-            }
-        }
-
         return player;
-
     }
 
-    public void SaveNewRecord(PlayerData data)
+    public void SaveNewRecord(Record data)
     {
         // Write data to JSON file
         WriteToJson(filePath, data);
