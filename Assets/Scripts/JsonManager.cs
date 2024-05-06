@@ -52,19 +52,18 @@ public class JsonManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.JoystickButton6) || Input.GetKeyDown(KeyCode.J))
             {
                 saved = true;
-                Record player = new Record();
                 AI = FindAnyObjectByType<AIController>();
-                player.initialAttack = AI.initialAttack;
-                player.attackTable = AI.attackTable;
 
+                Record player = CreateNewRecord(AI.initialAttack, AI.attackTable);
                 SaveNewRecord(player);
             }
         }
         
     }
 
-        // Method to write data to JSON file
-        private void WriteToJson(string filePath, Record data)
+
+    // Method to write data to JSON file
+    private void WriteToJson(string filePath, Record data)
     {
         string jsonData = JsonUtility.ToJson(data);
         File.WriteAllText(filePath, jsonData);
@@ -85,6 +84,7 @@ public class JsonManager : MonoBehaviour
         }
     }
 
+    // Method to create a new record for the JSON file
     public Record CreateNewRecord(int[] intialInput, int[,] attackInput)
     {
         Record player = new Record();
@@ -93,7 +93,7 @@ public class JsonManager : MonoBehaviour
 
         return player;
     }
-
+    // Method to save the record to the JSON file
     public void SaveNewRecord(Record data)
     {
         // Write data to JSON file

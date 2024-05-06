@@ -83,13 +83,19 @@ public class AIController : Controller
 
     public Actions warn()
     {
-        
-        Actions predictedAction = predictAction();
-        if (stunned)
+        Actions predictedAction = new Actions();
+
+        // Calls prediction algorithm if not stunned
+        if (!stunned)
+        {
+            predictedAction = predictAction();
+        }
+        // If stunned, do not predict action
+        // Set your action to stunned and disable the stun 
+        else
         {
             stunned = false;
             predictedAction = actions[7];
-            Debug.Log("Stun is reset");
         }
         currentAction = predictedAction;
         StartAction(predictedAction);
@@ -125,8 +131,10 @@ public class AIController : Controller
 
     public Actions predictAction()
     {
-        
         Actions returnAction = actions[0];
+
+
+        // Player is attack without a combo
         if (player.timeSinceLastAttack >= player.comboTime)
         {
             Debug.Log("First Attack!");
@@ -137,9 +145,9 @@ public class AIController : Controller
                 return returnAction;
             }
             returnAction = SelectFromRow(initialAttack);
-
-
         }
+
+        // Player is attacking with combo
         else if (player.timeSinceLastAttack < player.comboTime)
         {
             Debug.Log("Combo!");
@@ -163,8 +171,9 @@ public class AIController : Controller
             }
             returnAction = SelectFromRow(row);
         }
+
+
         player.timeSinceLastAttack = 0f;
-        
         return returnAction;
     }
 
@@ -259,10 +268,6 @@ public class AIController : Controller
                     closestDifference = difference;
                 }
             }
-            Debug.LogWarning("selected Action aggression is " + selectedAction.aggresiveness);
-            Debug.LogWarning("aggresion score is  " + playerAggresionScore);
-
-
         }
         return selectedAction;
     }
@@ -280,16 +285,21 @@ public class AIController : Controller
     }
     public void recordAction(Actions action)
     {
+        // Non move set action for example stunned
         if (action.ID > 6) { return; }
+        
+        // Statistic tracking
         playerAttackCount++;
         playerAggresionTotal += action.aggresiveness;
         playerAggresionScore = playerAggresionTotal / playerAttackCount;
 
+        // Record Non Combo Action
         if (lastAttackRecivedWasCombo == false)
         {
             initialAttack[action.ID] += 1;
             previousIndex = action.ID;
         }
+        // Record Combo-ed action
         else if (lastAttackRecivedWasCombo == true)
         {
             attackTable[previousIndex,action.ID] += 1;
