@@ -104,7 +104,7 @@ public class AIController : Controller
 
     public Actions punish()
     {
-        Actions action = actions[1];
+        Actions action = punishAction();
         //inCombat = false;
         currentAction = action;
         StartAction(action);
@@ -122,8 +122,6 @@ public class AIController : Controller
         List<Actions> offenseAction = new List<Actions>();
         offenseAction.Add(actions[0]);
         offenseAction.Add(actions[1]);
-        offenseAction.Add(actions[4]);
-        offenseAction.Add(actions[5]);
         Actions returnAction = actions[Random.Range(0, offenseAction.Count)];
         currentAction = returnAction;
         return returnAction;
@@ -248,12 +246,13 @@ public class AIController : Controller
             return predictedAction;
         }
 
-
+        // Select defence randomly from predicted actions defences
         if (counterType == ResponseType.Random)
         {
             int randNum = Random.Range(0, defences.Count);
             selectedAction = defences[randNum];
         }
+        // Select defence using weighted selction
         else if (counterType == ResponseType.Weighted)
         {
             for (int i = 1; i < defences.Count; i++)
