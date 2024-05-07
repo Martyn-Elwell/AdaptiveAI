@@ -22,6 +22,11 @@ public class HitDetection : MonoBehaviour
 
             Invoke("RunHitDetection", shortestTime);
         }
+        else if (AIAction != null)
+        {
+
+            Invoke("RunHitDetection", AIAction.impactTime);
+        }
 
     }
 
@@ -127,7 +132,7 @@ public class HitDetection : MonoBehaviour
         {
             AI.CorrectPrediction();
         }
-        else
+        else if (playerAction != null)
         {
             AI.InCorrectPrediction();
         }

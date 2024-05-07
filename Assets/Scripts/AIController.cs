@@ -14,6 +14,11 @@ public enum ResponseType
     Random = 0,
     Weighted = 1,
 }
+public enum ProactiveType
+{
+    Proactive = 0,
+    Passive = 1,
+}
 
 public class AIController : Controller
 {
@@ -33,10 +38,14 @@ public class AIController : Controller
     [SerializeField] public float confidenceWeighting = 1;
     [SerializeField] private AIType algorithmType = AIType.Probabilistic;
     [SerializeField] private ResponseType counterType = ResponseType.Random;
+    [SerializeField] private ProactiveType proactiveType = ProactiveType.Proactive;
     [SerializeField] public int[] initialAttack = new int[6];
     [SerializeField] public int[,] attackTable = new int[6,6];
     private bool lastAttackRecivedWasCombo = false;
     private int previousIndex = 0;
+
+    private float attackTimer = 0f;
+    private float attackDelay = 5f;
 
     [Header ("Debug Featrues")]
     public bool debugOverride = false;
@@ -48,11 +57,26 @@ public class AIController : Controller
 
     public void Update()
     {
+        ProactiveHandler();
 
         MovementHandler();
     }
 
-    public void MovementHandler()
+    public void ProactiveHandler()
+    {
+        if (proactiveType == ProactiveType.Proactive)
+        {
+            attackTimer += Time.deltaTime;
+            if (attackTimer > attackDelay)
+            {
+                punish();
+                attackTimer = 0f;
+            }
+        }
+    }
+
+
+        public void MovementHandler()
     {
         float distance = transform.position.z - player.transform.position.z;
         if (Mathf.Abs(distance - idealDistance) >= 0.2f)
@@ -73,7 +97,6 @@ public class AIController : Controller
         inCombat = true;
         Invoke("EndCombat", 1f);
         detector.InputAction(this, action);
-        //StartCoroutine(returnCoroutine(2f));
     }
 
     public void invokeWarn(float time)
@@ -83,6 +106,7 @@ public class AIController : Controller
 
     public Actions warn()
     {
+        attackTimer = 0f;
         Actions predictedAction = new Actions();
 
         // Calls prediction algorithm if not stunned
@@ -105,16 +129,9 @@ public class AIController : Controller
     public Actions punish()
     {
         Actions action = punishAction();
-        //inCombat = false;
         currentAction = action;
         StartAction(action);
         return action;
-    }
-
-    private IEnumerator wait(float time)
-    {
-        yield return new WaitForSeconds(time);
-        player.HitDetection();
     }
 
     public Actions punishAction()
